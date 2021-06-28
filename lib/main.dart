@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:weatherapp/screens/home_screen.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:weatherapp/controllers/location_controller.dart';
+import 'package:weatherapp/views/screens/home_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:weatherapp/controllers/weather_controller.dart';
+import 'package:weatherapp/controllers/settings_controller.dart';
 
-void main() {
-  runApp(MyApp());
+Future main() async {
+  await GetStorage.init();
+  await dotenv.load();
+  runApp(MyWeatherApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+// LinearGradient() -> #acb6e5: #86fde8
+// https://uigradients.com/#Windy
+
+class MyWeatherApp extends StatelessWidget {
+  final WeatherController weatherController = Get.put(WeatherController());
+  final SettingsController settingsController = Get.put(SettingsController());
+  final LocationController locationController = Get.put(LocationController());
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Weather App',
+    return GetMaterialApp(
+      title: 'Weather or Not',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.black,
-        accentColor: Colors.white,
-      ),
+          primaryColor: Colors.white,
+          accentColor: Colors.black,
+          scaffoldBackgroundColor: Colors.grey[100]),
       home: HomeScreen(),
     );
   }
